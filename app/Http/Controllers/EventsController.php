@@ -10,6 +10,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Date;
 use DB;
+use Carbon\Carbon;
 
 class EventsController extends BaseController
 {
@@ -195,17 +196,17 @@ class EventsController extends BaseController
 
     public function getFutureEventsWithWorkshops() {
 
-        $users = DB::table('events')
+        $events = DB::table('events')
             ->join('workshops', 'events.id', '=', 'workshops.event_id')
-            ->select('events.*', 'workshops.*')
-            ->where('events.*', 'workshops.*')
+            ->select('events.name', 'workshops.*')
+            ->where('workshops.start' ,'>', Carbon::now('Europe/Stockholm'))
             ->get();
 
         // $future_events = Event::query()
         //     ->with('future_workshops')
         //     ->get();
 
-        echo "<pre>";print_r($users);die();
+        echo "<pre>";print_r($events);die();
 
         $event_workshops = [];
         foreach ($events as $event) {
