@@ -9,6 +9,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Date;
+use DB;
 
 class EventsController extends BaseController
 {
@@ -193,6 +194,31 @@ class EventsController extends BaseController
      */
 
     public function getFutureEventsWithWorkshops() {
-        throw new \Exception('implement in coding task 2');
+
+        $users = DB::table('events')
+            ->join('workshops', 'events.id', '=', 'workshops.event_id')
+            ->select('events.*', 'workshops.*')
+            ->where('events.*', 'workshops.*')
+            ->get();
+
+        // $future_events = Event::query()
+        //     ->with('future_workshops')
+        //     ->get();
+
+        echo "<pre>";print_r($users);die();
+
+        $event_workshops = [];
+        foreach ($events as $event) {
+            $event_workshops[] = array("id" => $event->id, "name" => $event->name, "created_at" => $event->created_at->format("Y-m-d H:i:s"), "updated_at" => $event->updated_at->format("Y-m-d H:i:s"));
+            // echo "<pre>";print_r($event->workshops);die();
+        }   
+
+        // $post = Event::find(1);
+ 
+        // $comments = $post->workshops;
+         
+        echo "<pre>";print_r($event_workshops);die();
+
+        // throw new \Exception('implement in coding task 2');
     }
 }
